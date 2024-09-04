@@ -1,0 +1,179 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// Classe Book
+class Book {
+private String title;
+private String author;
+private int totalPages;
+private int currentPage;
+
+public Book(String title, String author, int totalPages) {
+this.title = title;
+this.author = author;
+this.totalPages = totalPages;
+this.currentPage = 0; // Inicia na primeira página
+}
+
+public void openBook() {
+this.currentPage = 1; // Abre o livro na primeira página
+}
+
+public void closeBook() {
+this.currentPage = 0; // Fecha o livro
+}
+
+public void nextPage() {
+if (currentPage < totalPages) {
+currentPage++;
+}
+}
+
+public void previousPage() {
+if (currentPage > 1) {
+currentPage--;
+}
+}
+
+public int getCurrentPage() {
+return currentPage;
+}
+
+public String getTitle() {
+return title;
+}
+
+public String getAuthor() {
+return author;
+}
+}
+
+// Classe User
+class User {
+private String username;
+private String password;
+private List<Book> library;
+
+public User(String username, String password) {
+this.username = username;
+this.password = password;
+this.library = new ArrayList<>();
+}
+
+public void login(String username, String password) {
+// Simulação de login
+if (this.username.equals(username) && this.password.equals(password)) {
+System.out.println("Login realizado com sucesso!");
+} else {
+System.out.println("Credenciais inválidas.");
+}
+}
+
+public void logout() {
+System.out.println("Logout realizado com sucesso.");
+}
+
+public void addBookToLibrary(Book book) {
+library.add(book);
+}
+
+public void removeBookFromLibrary(Book book) {
+library.remove(book);
+}
+
+public List<Book> getLibrary() {
+return library;
+}
+}
+
+// Classe Library
+class Library {
+private List<Book> books;
+
+public Library() {
+this.books = new ArrayList<>();
+}
+
+public void addBook(Book book) {
+books.add(book);
+}
+
+public void removeBook(Book book) {
+books.remove(book);
+}
+
+public List<Book> searchByTitle(String title) {
+List<Book> result = new ArrayList<>();
+for (Book book : books) {
+if (book.getTitle().equalsIgnoreCase(title)) {
+result.add(book);
+}
+}
+return result;
+}
+
+public List<Book> searchByAuthor(String author) {
+List<Book> result = new ArrayList<>();
+for (Book book : books) {
+if (book.getAuthor().equalsIgnoreCase(author)) {
+result.add(book);
+}
+}
+return result;
+}
+}
+
+// Classe Reader
+class Reader {
+private Book currentBook;
+
+public void openBook(Book book) {
+this.currentBook = book;
+book.openBook();
+}
+
+public void closeBook() {
+if (currentBook != null) {
+currentBook.closeBook();
+currentBook = null;
+}
+}
+
+public void readPage() {
+if (currentBook != null) {
+System.out.println("Lendo página " + currentBook.getCurrentPage() + " do livro " + currentBook.getTitle());
+} else {
+System.out.println("Nenhum livro aberto.");
+}
+}
+
+public void bookmarkPage(int page) {
+if (currentBook != null) {
+System.out.println("Página " + page + " marcada no livro " + currentBook.getTitle());
+}
+}
+
+public void goToPage(int page) {
+if (currentBook != null && page > 0 && page <= currentBook.getCurrentPage()) {
+System.out.println("Indo para a página " + page + " no livro " + currentBook.getTitle());
+}
+}
+}
+
+// Classe principal para testar a aplicação
+public class KindleApp {
+public static void main(String[] args) {
+User user = new User("usuario1", "senha123");
+user.login("usuario1", "senha123");
+
+Book book1 = new Book("Java Programming", "John Doe", 500);
+user.addBookToLibrary(book1);
+
+Reader reader = new Reader();
+reader.openBook(book1);
+reader.readPage();
+reader.nextPage();
+reader.readPage();
+reader.closeBook();
+}
+}
